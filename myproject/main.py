@@ -10,14 +10,18 @@ def main(argv): #argvでコマンドライン引数受け取り
         print('test mode')
     else:
         # パラメータ処理
-        howPast = int(argv[1]) if int(argv[1]) < 200 else 200 #1~200
+        firstInput = int(argv[1])
+        howPast = firstInput if firstInput < 200 else 200 #1~200
+        if firstInput > 200:
+            print('ろうそく足は最大200個前のデータしか取得できないため、200個前を取得しました')
         if len(argv) >= 3:
-            merginMinutes = argv[2] + 'm' if argv[2] in ['1', '3', '5', '10', '15', '30'] else '1m'
+            isMerginValueTrueFlg = argv[2] in ['1', '3', '5', '10', '15', '30']
+            merginMinutes = argv[2] + 'm' if isMerginValueTrueFlg else '1m'
+            if not isMerginValueTrueFlg:
+                print(argv[2], '分刻みのろうそく足データは存在しないため、1分足で取得しました。2つ目のパラメータは1,3,5,10,15,30のいずれかにしてください')
         else:
             merginMinutes = '1m'
             
-        print('mergin:', merginMinutes)
-
         ohl_hist = bybit.fetch_ohlcv(symbol='BTCUSDT',timeframe=merginMinutes, limit=howPast) #m:1,3,5,10,15,30
         targetCandle = ohl_hist[0]
         printData(targetCandle, merginMinutes)
@@ -27,12 +31,12 @@ def main(argv): #argvでコマンドライン引数受け取り
 def printData(targetCandle, merginMinutes):
     dateTime = fromUNIXmStoDatetime(targetCandle[0])
     s,h,l,e = targetCandle[1:-1]
-    print('時間：', dateTime)
-    print('分足：', merginMinutes[:-1], '分')
+    print('Time：', dateTime)
+    print('Mergin：', merginMinutes[:-1], '分')
     print('Start:', s)
-    print('High: +', h-s)
-    print('Low : ', l-s)
-    print('End :', e-s if e-s < 0 else '+ ' + str(e-s))
+    print('High : +', h-s)
+    print('Low  : ', l-s)
+    print('End  :', e-s if e-s < 0 else '+ ' + str(e-s))
     
 
 if __name__ == "__main__":
