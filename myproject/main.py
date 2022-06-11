@@ -1,4 +1,3 @@
-from datetime import date
 import sys
 import ccxt
 from mylib.pkg import fromUNIXmStoDatetime
@@ -8,6 +7,7 @@ def main(argv): #argvでコマンドライン引数受け取り
     
     if len(argv) == 1:
         print('test mode')
+        return -1
     else:
         # パラメータ処理
         firstInput = int(argv[1])
@@ -26,7 +26,7 @@ def main(argv): #argvでコマンドライン引数受け取り
         targetCandle = ohl_hist[0]
         printData(targetCandle, merginMinutes)
     
-    return 0
+        return 0
 
 def printData(targetCandle, merginMinutes):
     dateTime = fromUNIXmStoDatetime(targetCandle[0])
