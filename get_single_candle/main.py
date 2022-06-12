@@ -2,8 +2,10 @@ import sys
 import ccxt
 from mylib.pkg import fromUNIXmStoDatetime
 
-def main(argv): #argvでコマンドライン引数受け取り
+def main(firstInput,merginMinutes = '1m' ): #argvでコマンドライン引数受け取り
     bybit = ccxt.bybit()
+    
+    argv = [firstInput, merginMinutes]
     
     if len(argv) == 1:
         print('test mode')
